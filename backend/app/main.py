@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.router import api_router
 from app.core.config import settings
 import os
+import asyncio
+from app.services.telegram_service import telegram_service
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -21,11 +23,26 @@ if settings.BACKEND_CORS_ORIGINS:
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
-# Startup event to start the Telegram listener
+# Startup and shutdown events for Telegram service
 @app.on_event("startup")
 async def startup_event():
-    # Import here to avoid circular imports
-    from app.services.telegram_listener import start_telegram_listener
-    import threading
-    thread = threading.Thread(target=start_telegram_listener, daemon=True)
-    thread.start()
+    # Start Telegram listener if configured
+    if settings.TELEGRAM_BOT_TOKEN and settings.TELEGRAM_USER_ID:
+        try:
+            await telegram_service.initialize()
+            # Start polling in the background
+            asyncio.create_task(telegram_service.start_polling())
+            print("📱 Telegram listener started")
+        except Exception as e:
+            print(f"❌ Failed to start Telegram listener: {e}")
+    else:
+        print("⚠️ Telegram credentials not configured, listener not started")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    # Stop Telegram listener
+    try:
+        await telegram_service.stop()
+        print("📱 Telegram listener stopped")
+    except Exception as e:
+        print(f"❌ Error stopping Telegram listener: {e}")

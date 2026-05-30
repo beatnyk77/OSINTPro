@@ -2,10 +2,12 @@ fastapi==0.104.1
 uvicorn[standard]==0.24.0
 python-dotenv==1.0.0
 tweepy==4.14.0
-python-telegram-bot==20.3
+python-telegram-bot>=20.0
 psycopg2-binary==2.9.9
 SQLAlchemy==2.0.29
 alembic==1.13.1
 python-multipart==0.0.6
 spacy>=3.0.0
 sumy>=0.12.1
+Pillow>=10.0.0
+imagehash>=4.2.1
