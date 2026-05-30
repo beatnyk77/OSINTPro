@@ -5,7 +5,7 @@ from app.core.config import settings
 from app.core.database import SessionLocal
 from app.models.event import Event
 from app.services.credibility_service import score_twitter_user
-from app.services.content_analysis_service import summarize_text, extract_entities
+from app.services.content_analysis_service import summarize_text, extract_entities, analyze_content
 
 def fetch_twitter_data(bearer_token: str, query: str, since_id: str = None):
     client = tweepy.Client(bearer_token=bearer_token, wait_on_rate_limit=True)
@@ -48,12 +48,16 @@ def store_tweets(bearer_token: str, query: str):
         tweets_data = fetch_twitter_data(bearer_token, query)
         for t in tweets_data:
             credibility = score_twitter_user(t.get('user_data'))
-            summary = summarize_text(t['text'])
-            entities = extract_entities(t['text'])
+            
+            # Use the new content analysis service
+            analysis = analyze_content(t['text'])
+            summary = analysis['summary']
+            entities = analysis['entities']  # This is now a list of dicts
+            
             event = Event(
                 text=t['text'],
                 summary=summary,
-                entities=json.dumps(entities),  # Store as JSON string
+                entities=json.dumps(entities),  # Store entities as JSON string
                 source_type='twitter',
                 source_id=str(t['id']),
                 credibility_score=credibility
