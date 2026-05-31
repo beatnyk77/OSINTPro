@@ -477,7 +477,40 @@ curl -s "http://localhost:8000/api/v1/events?limit=1" | jq '.[0].entities'
 curl -s "http://localhost:8000/api/v1/events?limit=1" | jq '.[0] | select(.entities | length > 0)'
 ```
 
-## 🚀 Next Steps for Enhancement
+## 🚀 Next Steps for Enhancement (IDEX Submission Focus)
+
+### Immediate Improvements (Current Sprint)
+1. **Repo Health & Setup**:
+   - Added .gitignore for clean repository management
+   - Added MIT LICENSE for open-source distribution
+   - Updated documentation to reflect planned IDEX enhancements
+
+2. **Frontend Upgrades**:
+   - Replace Mapbox GL JS with Leaflet/MapLibre for open-source mapping
+   - Integrate Cytoscape.js for relationship/graph visualization
+   - Add temporal slider for time-based event filtering
+   - Implement confidence heat mapping for spatial analysis
+
+3. **LLM Integration**:
+   - Integrate Ollama for local LLM processing (air-gapped compatible)
+   - Use LLMs for event summarization and intelligence briefing generation
+   - Implement entity extraction and relationship detection via LLM
+
+4. **Advanced Analytics**:
+   - Add BERTopic for topic modeling and trend detection
+   - Integrate NetworkX for sophisticated network/graph analysis
+   - Implement anomaly detection algorithms for unusual pattern identification
+   - Enhance entity resolution with fusion techniques
+
+5. **Real-time Processing**:
+   - Add Celery or RQ for asynchronous task processing
+   - Implement real-time watches for continuous source monitoring
+   - Create alerting mechanisms for threshold breaches
+
+6. **Enhanced Media Forensics**:
+   - Expand perceptual hashing capabilities
+   - Add advanced image/video analysis techniques
+   - Improve metadata extraction and correlation
 
 ### Short-Term (1-2 Weeks)
 1. **Frontend Enhancements**:
